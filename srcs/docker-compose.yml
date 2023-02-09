@@ -1,0 +1,7 @@
+services:
+  nginx:
+    image: ./requirements/nginx/Dockerfile
+    ports:
+      - "423:423"
+    volumes:
+      - .:/requirements/nginx/tools
