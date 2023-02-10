@@ -1,7 +1,7 @@
 services:
-  nginx:
-    image: ./requirements/nginx/Dockerfile
+  web:
+    build: requirements/nginx
     ports:
       - "423:423"
     volumes:
-      - .:/requirements/nginx/tools
+      - /home/nflan/data/nginx
