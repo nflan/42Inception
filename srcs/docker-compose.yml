@@ -1,7 +1,8 @@
 services:
-  web:
-    build: requirements/nginx
+  nginx:
+    build: /home/nflan/inception/srcs/requirements/nginx
     ports:
-      - "423:423"
+      - "80:80"
+      - "443:443"
     volumes:
       - /home/nflan/data/nginx

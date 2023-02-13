@@ -1,9 +1,9 @@
 # syntax=docker/dockerfile:1
 FROM debian:buster
-COPY . nginx/nginx.conf
-RUN echo "oui"
-EXPOSE	443/tcp
-VOLUME /home/nflan/data
-USER nflan
+RUN apt update
+RUN apt install nginx -y
+COPY conf/nginx.conf /etc/nginx/sites-available/nginx.conf
+RUN apt install openssl -y
+COPY conf/conf.sh /tmp/conf.sh
+ENTRYPOINT ["/tmp/conf.sh"]
 #WORKDIR	/tools
-#RUN apt install -r ./tools/requirements.txt
