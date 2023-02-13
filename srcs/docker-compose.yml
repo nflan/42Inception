@@ -6,3 +6,9 @@ services:
       - "443:443"
     volumes:
       - /home/nflan/data/nginx
+  mariadb:
+    build: /home/nflan/inception/srcs/requirements/mariadb
+    ports:
+      - "3306:3306"
+    volumes:
+      - /home/nflan/data/mariadb
