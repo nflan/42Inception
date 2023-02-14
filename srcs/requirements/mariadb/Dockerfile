@@ -2,6 +2,6 @@
 FROM debian:buster
 RUN apt update
 RUN apt install -y mariadb-server
-RUN apt install -y gnupg
+RUN test -d '/var/run/mysqld/' || mkdir '/var/run/mysqld' && chmod 777 '/var/run/mysqld' && touch '/var/run/mysqld/mysqld.sock' && chmod 777 '/var/run/mysqld/mysqld.sock' && chown mysql:mysql '/var/run/mysqld/'
 COPY conf/conf.sh /tmp/conf.sh
 ENTRYPOINT ["/tmp/conf.sh"]
