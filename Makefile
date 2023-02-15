@@ -1,10 +1,11 @@
+SRC= /home/nflan/inception/srcs/docker-compose.yml
 NAME= inception
 
 all:
-	cd srcs && docker compose -p $(NAME) build && docker compose -p $(NAME) up
+	docker compose -f $(SRC) -p $(NAME) build && docker compose -f $(SRC) -p $(NAME) up
 
 stop:
-	cd srcs && docker compose -p $(NAME) stop
+	docker compose -f $(SRC) -p $(NAME) stop
 
 .PHONY: stop
 

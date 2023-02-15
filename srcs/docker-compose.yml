@@ -6,6 +6,21 @@ services:
       - "443:443"
     volumes:
       - /home/nflan/data/nginx
+  wordpress:
+    depends_on:
+      - nginx
+      - mariadb
+    build: /home/nflan/inception/srcs/requirements/wordpress
+    links:
+      - mariadb:mysql
+    environment:
+      - WORDPRESS_DB_PASSWORD=incept42
+      - WORDPRESS_DB_USER=root
+      - nflan.42.fr
+    ports:
+      - "9000:9000"
+    volumes:
+      - /home/nflan/data/wordpress
   mariadb:
     build: /home/nflan/inception/srcs/requirements/mariadb
     ports:

@@ -1,17 +1,21 @@
 #! /bin/bash
 
-cat << OEF > config.sql
-ALTER USER 'root'@'inception' IDENTIFIED BY 'incept42'
-CREATE USER 'nflan42'@'inception' IDENTIFIED BY 'nflan42'
-CREATE DATABASE wordpress
-GRANT ALL PRIVILEGES ON wordpress * . * TO 'root'@'inception' IDENTIFIED BY 'incept42'
-FLUSH PRIVILEGES
+cat << OEF > /tmp/config.sql
+ALTER USER 'root'@'localhost' IDENTIFIED BY 'incept42';
+CREATE USER 'nflan42'@'localhost' IDENTIFIED BY 'nflan42';
+CREATE DATABASE wordpress;
+GRANT ALL PRIVILEGES ON wordpress . * TO 'root'@'localhost' IDENTIFIED BY 'incept42';
+FLUSH PRIVILEGES;
 OEF
 
 service mysql start
-usleep 5
-mysql -uroot --password="" < config.sql
-/q
+#while service mysql status != 0
+#do
+#	sleep 1
+#done
+sleep 5
+mysql -uroot --password="" < /tmp/config.sql
+service mysql restart
 mysql -uroot --password="incept42"
 sleep infinity
 exec mysqld
