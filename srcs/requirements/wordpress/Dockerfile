@@ -1,5 +1,6 @@
 # syntax=docker/dockerfile:1
 FROM debian:buster
+<<<<<<< HEAD
 RUN apt update && apt -y full-upgrade
 RUN apt-get install -y lsb-release apt-transport-https ca-certificates wget mariadb-client curl
 RUN wget -O /etc/apt/trusted.gpg.d/php.gpg https://packages.sury.org/php/apt.gpg
@@ -13,6 +14,16 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN apt update && apt -y full-upgrade
 RUN test -d '/run/php' || mkdir '/run/php' && chmod 0755 '/run/php' && touch '/run/php/php7.4-fpm.sock' && chmod 0755 '/run/php/php7.4-fpm.sock'
 RUN sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
+=======
+RUN apt update
+RUN apt install mariadb-client -y
+RUN apt install lsb-release -y
+RUN apt install php-fpm -y
+RUN apt install php-mysql -y
+RUN apt install wget -y
+RUN apt install tar -y
+RUN apt install curl -y
+>>>>>>> a681295 (Starting wordpress and get dependances)
 COPY conf/conf.sh /tmp/conf.sh
 RUN chmod 0777 /tmp/conf.sh
 ENTRYPOINT ["/tmp/conf.sh"]

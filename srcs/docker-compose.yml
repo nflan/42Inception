@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 version: '3.8'
 
+=======
+version: '3.1'
+>>>>>>> a681295 (Starting wordpress and get dependances)
 services:
   mariadb:
     container_name: mariadb
@@ -46,6 +50,7 @@ services:
     ports:
       - "443:443"
     volumes:
+<<<<<<< HEAD
       - wordpress-data:/var/www/html
     networks:
       - myeverything
@@ -53,6 +58,42 @@ services:
       wordpress:
         condition: service_healthy
   
+=======
+      - wordpress-data:/var/www/html/nflan.42.fr
+    networks:
+      - myeverything
+    depends_on:
+      wordpress:
+        condition: service_healthy
+  wordpress:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    build: /home/nflan/inception/srcs/requirements/wordpress
+    environment:
+      - nflan.42.fr
+    volumes:
+      - wordpress-data:/var/www/html/nflan.42.fr
+    networks:
+      - myeverything
+    healthcheck:
+      test: ["CMD", "wp", "find"]
+      interval: 4s
+      timeout: 4s
+      retries: 20
+  mariadb:
+    build: /home/nflan/inception/srcs/requirements/mariadb
+    healthcheck:
+      test: ["CMD", "mysql", "--user=nflan42", "--password=nflan42", "wordpress"]
+      interval: 2s
+      timeout: 2s
+      retries: 20
+    volumes:
+      - database:/var/lib/mysql
+    networks:
+      - myeverything
+
+>>>>>>> a681295 (Starting wordpress and get dependances)
 networks:
   myeverything:
 
