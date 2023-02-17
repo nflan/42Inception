@@ -24,7 +24,7 @@ services:
     networks:
       - myeverything
     healthcheck:
-      test: ["CMD", "wp", "find"]
+      test: ["CMD", "test", "-f", "/var/www/html/nflan.42.fr/wp-config.php"]
       interval: 4s
       timeout: 4s
       retries: 20
