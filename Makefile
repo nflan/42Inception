@@ -9,5 +9,9 @@ all:
 stop:
 	cd srcs && docker compose stop
 
+fclean:
+	make stop
+	sudo rm -rf /home/nflan/data/* y
+
 .PHONY: stop
 
