@@ -80,7 +80,7 @@ services:
       test: ["CMD", "wp", "find"]
       interval: 4s
       timeout: 4s
-      retries: 20
+      retries: 40
   mariadb:
     build: /home/nflan/inception/srcs/requirements/mariadb
     healthcheck:

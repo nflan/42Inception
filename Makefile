@@ -21,7 +21,15 @@ stop:
 	cd srcs && docker compose stop
 >>>>>>> a681295 (Starting wordpress and get dependances)
 
+<<<<<<< HEAD
 fclean: stop
 	sudo rm -rf /home/nflan/data/*
+=======
+fclean:
+	make stop
+	sudo rm -rf /home/nflan/data/* y
+
+.PHONY: stop
+>>>>>>> acda936 (Struggling a bit)
 
 .PHONY: stop bonus fclean
