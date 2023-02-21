@@ -1,10 +1,6 @@
 #! /bin/bash
 
-#apt update
-#mkdir -p /var/www/html/nflan.42.fr
 pushd /var/www/html/nflan.42.fr
-#wget https://wordpress.org/latest.tar.gz
-#tar -xvzf latest.tar.gz
 chown -R www-data:www-data /var/www/html/nflan.42.fr/
 if [ ! -f wp-config.php ]
 then
@@ -15,7 +11,7 @@ then
 	wp option update siteurl ${WORDPRESS_WEBSITE_URL} --allow-root
 	cd wp-content && chmod 775 uploads
 	sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
-	wp user create nflan nflan@example.com --allow-root --user_pass=nflan
+	wp user create ${WP_USER2} ${WP_UEMAIL2} --user_pass=${WP_UPASS2} --allow-root
 
 fi
 exec php-fpm7.4 -F

@@ -19,6 +19,5 @@ RUN mv wp-cli.phar /usr/local/bin/wp
 RUN apt update && apt -y full-upgrade
 RUN test -d '/run/php' || mkdir '/run/php' && chmod 777 '/run/php' && touch '/run/php/php7.4-fpm.sock' && chmod 777 '/run/php/php7.4-fpm.sock'
 RUN test -d '/var/www/html/nflan.42.fr' || mkdir '/var/www/html/nflan.42.fr' && chmod 777 '/var/www/html/nflan.42.fr/'
-COPY conf/adm.txt /tmp/adm.txt
 COPY conf/conf.sh /tmp/conf.sh
 ENTRYPOINT ["/tmp/conf.sh"]

@@ -29,6 +29,9 @@ services:
         WORDPRESS_ADMIN_USER: $WORDPRESS_ADMIN_USER
         WORDPRESS_ADMIN_PASSWORD: $WORDPRESS_ADMIN_PASSWORD
         WORDPRESS_ADMIN_EMAIL: $WORDPRESS_ADMIN_EMAIL
+        WP_USER2: $WP_USER2
+        WP_UPASS2: $WP_UPASS2
+        WP_UEMAIL2: $WP_UEMAIL2
     volumes:
       - wordpress-data:/var/www/html/nflan.42.fr
     networks:
@@ -41,7 +44,7 @@ services:
   mariadb:
     build: /home/nflan/inception/srcs/requirements/mariadb
     healthcheck:
-      test: ["CMD", "mysql", "--user=nflan42", "--password=nflan42", "wordpress"]
+      test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress"]
       interval: 2s
       timeout: 2s
       retries: 20

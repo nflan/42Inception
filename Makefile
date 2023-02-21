@@ -4,14 +4,14 @@ NAME= inception
 all:
 	test -d /home/nflan/data/wordpress || mkdir -p /home/nflan/data/wordpress
 	test -d /home/nflan/data/mariadb || mkdir -p /home/nflan/data/mariadb
-	cd srcs && docker compose up --build
+	docker compose -f srcs/docker-compose.yml up --build
 
 stop:
-	cd srcs && docker compose stop
+	docker compose -f srcs/docker-compose.yml stop
 
 fclean:
 	make stop
-	sudo rm -rf /home/nflan/data/* y
+	sudo rm -rf /home/nflan/data/*
 
 .PHONY: stop
 
