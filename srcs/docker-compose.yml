@@ -29,13 +29,12 @@ services:
         WORDPRESS_ADMIN_USER: $WORDPRESS_ADMIN_USER
         WORDPRESS_ADMIN_PASSWORD: $WORDPRESS_ADMIN_PASSWORD
         WORDPRESS_ADMIN_EMAIL: $WORDPRESS_ADMIN_EMAIL
-     
     volumes:
       - wordpress-data:/var/www/html/nflan.42.fr
     networks:
       - myeverything
     healthcheck:
-      test: ["CMD", "test", "-f", "/var/www/html/nflan.42.fr/wp-config.php"]
+      test: ["CMD", "service", "php7.4-fpm", "status"]
       interval: 4s
       timeout: 4s
       retries: 40
