@@ -18,7 +18,18 @@ services:
         condition: service_healthy
     build: /home/nflan/inception/srcs/requirements/wordpress
     environment:
-      - nflan.42.fr
+        DATABASE: $DATABASE
+        DATABASE_WP: $DATABASE_WP
+        DATABASE_PASSWORD: $DATABASE_PASSWORD
+        DATABASE_USER: $DATABASE_USER
+        DATABASE_UPASS: $DATABASE_UPASS
+        WORDPRESS_WEBSITE_TITLE: $WORDPRESS_WEBSITE_TITLE
+        WORDPRESS_WEBSITE_URL_WITHOUT_HTTP: $WORDPRESS_WEBSITE_URL_WITHOUT_HTTP
+        WORDPRESS_WEBSITE_URL: $WORDPRESS_WEBSITE_URL
+        WORDPRESS_ADMIN_USER: $WORDPRESS_ADMIN_USER
+        WORDPRESS_ADMIN_PASSWORD: $WORDPRESS_ADMIN_PASSWORD
+        WORDPRESS_ADMIN_EMAIL: $WORDPRESS_ADMIN_EMAIL
+     
     volumes:
       - wordpress-data:/var/www/html/nflan.42.fr
     networks:
@@ -39,6 +50,12 @@ services:
       - database:/var/lib/mysql
     networks:
       - myeverything
+    environment:
+        DATABASE_WP: $DATABASE_WP
+        DATABASE_PASSWORD: $DATABASE_PASSWORD
+        DATABASE_ADM: $DATABASE_ADM
+        DATABASE_USER: $DATABASE_USER
+        DATABASE_UPASS: $DATABASE_UPASS
 
 networks:
   myeverything:

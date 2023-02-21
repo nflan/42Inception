@@ -1,12 +1,12 @@
 #! /bin/bash
 
-if [ ! -d /var/lib/mysql/wordpress ]
-then
+#if [ ! -d /var/lib/mysql/wordpress ]
+#then
 	cat << BLOCK > /tmp/config.sql
-ALTER USER 'root'@'localhost' IDENTIFIED BY 'incept42';
-CREATE USER 'nflan42'@'%' IDENTIFIED BY 'nflan42';
-CREATE DATABASE wordpress;
-GRANT ALL PRIVILEGES ON wordpress . * TO 'nflan42'@'%' IDENTIFIED BY 'nflan42';
+ALTER USER '${DATABASE_ADM}'@'localhost' IDENTIFIED BY '${DATABASE_PASSWORD}';
+CREATE USER '${DATABASE_USER}'@'%' IDENTIFIED BY '${DATABASE_UPASS}';
+CREATE DATABASE ${DATABASE_WP};
+GRANT ALL PRIVILEGES ON ${DATABASE_WP} . * TO '${DATABASE_USER}'@'%' IDENTIFIED BY '${DATABASE_UPASS}';
 FLUSH PRIVILEGES
 BLOCK
 
@@ -18,7 +18,7 @@ do
 done
 sleep 1
 mysql -uroot --password="" < /tmp/config.sql
-mysqladmin --user=root --password=incept42 shutdown
+mysqladmin --user=${DATABASE_ADM} --password=${DATABASE_PASSWORD} shutdown
 sleep 1
-fi
+#fi
 exec mysqld --bind-address=0.0.0.0
