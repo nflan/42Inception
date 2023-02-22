@@ -2,8 +2,6 @@
 FROM debian:buster
 RUN apt update && apt -y full-upgrade
 RUN apt install mariadb-client -y
-RUN apt install redis -y
-RUN apt install tar -y
 RUN apt install curl -y
 RUN apt install wget -y
 RUN apt -y install lsb-release apt-transport-https ca-certificates 
