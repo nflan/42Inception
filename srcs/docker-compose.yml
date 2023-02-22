@@ -1,17 +1,22 @@
-version: '3.1'
+version: '3.8'
 services:
-  nginx:
-    build: /home/nflan/inception/srcs/requirements/nginx
-    ports:
-      - "80:80"
-      - "443:443"
+  mariadb:
+    build: /home/nflan/inception/srcs/requirements/mariadb
+    healthcheck:
+      test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
+      interval: 2s
+      timeout: 2s
+      retries: 20
     volumes:
-      - wordpress-data:/var/www/html/nflan.42.fr
+      - database:/var/lib/mysql
     networks:
       - myeverything
-    depends_on:
-      wordpress:
-        condition: service_healthy
+    environment:
+        DATABASE_WP: $DATABASE_WP
+        DATABASE_PASSWORD: $DATABASE_PASSWORD
+        DATABASE_ADM: $DATABASE_ADM
+        DATABASE_USER: $DATABASE_USER
+        DATABASE_UPASS: $DATABASE_UPASS
   wordpress:
     depends_on:
       mariadb:
@@ -41,23 +46,27 @@ services:
       interval: 4s
       timeout: 4s
       retries: 40
-  mariadb:
-    build: /home/nflan/inception/srcs/requirements/mariadb
-    healthcheck:
-      test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
-      interval: 2s
-      timeout: 2s
-      retries: 20
+  nginx:
+    build: /home/nflan/inception/srcs/requirements/nginx
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
-      - database:/var/lib/mysql
+      - wordpress-data:/var/www/html/nflan.42.fr
     networks:
       - myeverything
+    depends_on:
+      wordpress:
+        condition: service_healthy
+  
+  adminer:
+    build: /home/nflan/inception/srcs/requirements/bonus/adminer
     environment:
         DATABASE_WP: $DATABASE_WP
-        DATABASE_PASSWORD: $DATABASE_PASSWORD
-        DATABASE_ADM: $DATABASE_ADM
         DATABASE_USER: $DATABASE_USER
         DATABASE_UPASS: $DATABASE_UPASS
+    networks:
+      - myeverything
 
 networks:
   myeverything:
