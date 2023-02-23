@@ -1,6 +1,8 @@
 version: '3.8'
 services:
   mariadb:
+    container_name: mariadb
+    image: mariadb:inception
     build: /home/nflan/inception/srcs/requirements/mariadb
     healthcheck:
       test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
@@ -14,6 +16,8 @@ services:
     env_file:
       .env
   wordpress:
+    container_name: wordpress
+    image: wordpress:inception
     depends_on:
       mariadb:
         condition: service_healthy
@@ -30,6 +34,8 @@ services:
       timeout: 4s
       retries: 40
   nginx:
+    container_name: nginx
+    image: nginx:inception
     build: /home/nflan/inception/srcs/requirements/nginx
     ports:
       - "80:80"
@@ -43,6 +49,8 @@ services:
         condition: service_healthy
   
   adminer:
+    container_name: adminer
+    image: adminer:inception
     depends_on:
       mariadb:
         condition: service_healthy
@@ -51,6 +59,19 @@ services:
       .env
     volumes:
       - wordpress-data:/var/www/html
+    networks:
+      - myeverything
+  cadvisor:
+    container_name: cadvisor
+    image: cadvisor:inception
+    build: /home/nflan/inception/srcs/requirements/bonus/cadvisor
+    volumes:
+      - wordpress-data:/var/www/html
+      - database:/var/lib/mysql
+      - /:/rootfs:ro
+      - /var/run:/var/run:rw
+      - /sys:/sys:ro
+      - /var/lib/docker/:/var/lib/docker:ro
     networks:
       - myeverything
 
