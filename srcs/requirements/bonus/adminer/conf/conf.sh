@@ -1,9 +1,8 @@
 #! /bin/bash
 
-#mv /usr/share/adminer/adminer-*.php /usr/share/adminer/adminer.php &> /dev/null
-#echo "Alias /adminer.php /usr/share/adminer/adminer.php" | tee /etc/apache2/conf-available/adminer.conf
-#a2enconf adminer.conf
-#service apache2 reload # -server_name="wordpress"
-#exec php -S 127.0.0.2:8000 -t /usr/share/adminer/
-sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
-exec sleep infinity
+test -d '/var/www/html/adminer' || mkdir '/var/www/html/adminer' && chmod 0755 '/var/www/html/adminer'
+cd '/var/www/html/adminer' && test -f 'adminer.php' || wget -O adminer.php https://github.com/vrana/adminer/releases/download/v4.8.1/adminer-4.8.1.php
+cd '/var/www/html/adminer'; chmod 0755 adminer.php
+chown -R www-data:www-data /var/www/html/adminer/adminer.php
+echo "Starting php-fpm for Adminer"
+exec php-fpm7.4 -F

@@ -1,5 +1,6 @@
 #! /bin/bash
 
+test -d '/var/www/html/nflan.42.fr' || mkdir '/var/www/html/nflan.42.fr' && chmod 0755 '/var/www/html/nflan.42.fr/'
 pushd /var/www/html/nflan.42.fr &> /dev/null
 chown -R www-data:www-data /var/www/html/nflan.42.fr/
 if [ ! -f wp-config.php ]
@@ -12,6 +13,5 @@ then
 	wp user create ${WP_USER2} ${WP_UEMAIL2} --user_pass=${WP_UPASS2} --allow-root
 fi
 cd wp-content && chmod 775 uploads
-sed -i 's/listen = \/run\/php\/php7.4-fpm.sock/listen = 9000/g' /etc/php/7.4/fpm/pool.d/www.conf
-echo "Starting php-fpm"
+echo "Starting php-fpm for Wordpress"
 exec php-fpm7.4 -F

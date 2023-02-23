@@ -42,6 +42,18 @@ services:
       wordpress:
         condition: service_healthy
   
+  adminer:
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    build: /home/nflan/inception/srcs/requirements/bonus/adminer
+    env_file:
+      .env
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - myeverything
+
 networks:
   myeverything:
 
