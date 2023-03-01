@@ -1,27 +1,31 @@
 version: '3.8'
+
 services:
-    mariadb:
-        container_name: mariadb
+  mariadb:
+    container_name: mariadb
     image: mariadb:inception
     build: /home/nflan/inception/srcs/requirements/mariadb
     healthcheck:
         test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
-    interval: 2s
-    timeout: 2s
-    retries: 20
+        interval: 2s
+        timeout: 2s
+        retries: 20
     volumes:
         - database:/var/lib/mysql
     networks:
         - myeverything
     env_file:
         .env
-wordpress:
+
+  wordpress:
     container_name: wordpress
     image: wordpress:inception
     depends_on:
-        mariadb:
-            condition: service_healthy
+      mariadb:
+        condition: service_healthy
     build: /home/nflan/inception/srcs/requirements/wordpress
+    environment:
+        - BONUS=1
     env_file:
         .env
     volumes:
@@ -29,31 +33,34 @@ wordpress:
     networks:
         - myeverything
     healthcheck:
-        test: ["CMD", "service", "php7.4-fpm", "status"]
-    interval: 4s
-    timeout: 4s
-    retries: 40
-nginx:
+      test: ["CMD", "service", "php7.4-fpm", "status"]
+      interval: 4s
+      timeout: 4s
+      retries: 40
+
+  nginx:
     container_name: nginx
     image: nginx:inception
     build: /home/nflan/inception/srcs/requirements/nginx
+    environment:
+        - BONUS=1
     ports:
         - "80:80"
-      - "443:443"
+        - "443:443"
     volumes:
         - wordpress-data:/var/www/html
     networks:
         - myeverything
     depends_on:
-        wordpress:
-            condition: service_healthy
+      wordpress:
+        condition: service_healthy
 
-adminer:
+  adminer:
     container_name: adminer
     image: adminer:inception
     depends_on:
-        mariadb:
-            condition: service_healthy
+      wordpress:
+        condition: service_healthy
     build: /home/nflan/inception/srcs/requirements/bonus/adminer
     env_file:
         .env
@@ -61,41 +68,62 @@ adminer:
         - wordpress-data:/var/www/html
     networks:
         - myeverything
-cadvisor:
+  
+  cadvisor:
     container_name: cadvisor
     image: cadvisor:inception
+    privileged: true
+    depends_on:
+      wordpress:
+        condition: service_healthy
     build: /home/nflan/inception/srcs/requirements/bonus/cadvisor
     volumes:
         - /:/rootfs:ro
         - /var/run:/var/run:rw
         - /sys:/sys:ro
         - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+        - 9092:8080
     networks:
         - myeverything
-redis:
+
+  redis:
     container_name: redis
-    build: /home/nflan/inception/srcs/requirements/bonus/redis
     image: redis:inception
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    build: /home/nflan/inception/srcs/requirements/bonus/redis
     sysctls:
         - net.core.somaxconn=512
+    env_file:
+        .env
     networks:
         - myeverything
     volumes:
-        - redis-volume:/var/lib/redis
+        - redis-vol:/var/lib/redis
 
 networks:
     myeverything:
 
-        volumes:
-            wordpress-data:
-                driver: local
-    driver_opts:
-        type: none
-    device: "/home/nflan/data/wordpress"
-    o: bind
-database:
+volumes:
+  wordpress-data:
     driver: local
     driver_opts:
-        type: none
-    device: "/home/nflan/data/mariadb"
-    o: bind
+      type: none
+      device: "/home/nflan/data/wordpress"
+      o: bind
+
+  database:
+    driver: local
+    driver_opts:
+      type: none
+      device: "/home/nflan/data/mariadb"
+      o: bind
+
+  redis-vol:
+    driver: local
+    driver_opts:
+      type: none
+      device: "/home/nflan/data/redis"
+      o: bind

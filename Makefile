@@ -9,6 +9,7 @@ all:
 bonus:
 	test -d /home/nflan/data/wordpress || mkdir -p /home/nflan/data/wordpress
 	test -d /home/nflan/data/mariadb || mkdir -p /home/nflan/data/mariadb
+	test -d /home/nflan/data/redis || mkdir -p /home/nflan/data/redis
 	docker compose -f srcs/docker-compose_bonus.yml up --build --force-recreate --remove-orphans
 
 stop:

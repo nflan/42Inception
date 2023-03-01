@@ -15,5 +15,5 @@ RUN cd /usr/local/go/src; \
 	make -j build; \
 	cp _output/cadvisor /usr/local/bin; \
 	chmod 0777 /usr/local/bin/cadvisor
-RUN echo "Cadvisor is starting"
+RUN echo "Stating Cadvisor"
 CMD ["cadvisor"]
