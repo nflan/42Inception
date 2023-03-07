@@ -1,0 +1,118 @@
+body {
+	text-align: center;
+	margin: 10px;
+	font-family: didact gothic;
+	color: #2E657C
+}
+
+#top-span{
+	height: 250px;
+}
+
+#top-img {
+	height: 100%;
+}
+
+#middle-imgs {
+	margin: 0% 5%;
+	padding-top: 10px;
+	width: 90%;
+}
+
+.tbody {
+	width: 30%;
+}
+
+.tcel-top {
+	width: 30%;
+	font-size:1.1em;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.tcel-title {
+	width: 30%;
+	font-size:1.1em;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+
+.tcel-img {
+	height: 10em;
+	padding-left: 5px;
+	padding-right: 5px;
+	width: 30%;
+}
+
+.cel-img {
+	width: 100%;
+	min-height: 10em;
+}
+
+.flex-center{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 85%;
+}
+
+h2 {
+	margin-bottom: 30px;
+}
+
+.titles {
+	text-align: center;
+	font-size: 2em;
+	font-family: roboto;
+	color: #EF8058;
+}
+
+#ftext {
+	margin-bottom: 40px;
+	margin-top: 40px;
+	top: 2em;
+	text-align: left;
+	font-size: 17px;
+	padding-left: 10px;
+	color: #EF8058;
+}
+
+#ftable {
+	display: flex;
+	justify-content: right;
+	padding: 20px;
+}
+
+.tlogo{
+	width: 60px;
+	height: 60px;
+	padding: 0px 10px 0px 10px;
+	margin: 0px;
+	vertical-align: middle;
+}
+
+.logo {
+	width: 100%;
+	height: 100%;
+}
+
+header{
+	height: 350px;
+}
+nav{
+	height: 30px;
+}
+section{
+	margin-top:30px;
+	margin-bottom: 30px;
+	padding-top: 30px;
+	padding-bottom: 30px;
+	min-height: 300px;
+	background: #EF8058;
+}
+footer{
+	column-count: 2;
+	height: 100px;
+	background: #2E657C;
+}

@@ -1,20 +1,23 @@
 #! bin/bash
 
-openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/key.pem -out /etc/ssl/certs/cert.pem -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=nflan/CN=adminer.fr"
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/key.pem -out /etc/ssl/certs/cert.pem -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=nflan/CN=lld.fr"
 
-if [ ! -f /etc/nginx/sites-available/adminer.conf ]
+if [ ! -f /etc/nginx/sites-available/lld.conf ]
 then
-cat << EOF > "/etc/nginx/sites-available/adminer.conf"
+mkdir /var/www/html/lld &> /dev/null
+mv /tmp/index.html /var/www/html/lld &> /dev/null
+mv /tmp/lld.css /var/www/html/lld &> /dev/null
+cat << EOF > "/etc/nginx/sites-available/lld.conf"
 server {
   listen 80;
-  server_name adminer.fr;
+  server_name lld.fr;
 
   return 301 https://\$host\$request_uri;
 }
 
 server {
   listen 443 ssl;
-  server_name adminer.fr;
+  server_name lld.fr;
     
 	ssl_certificate /etc/ssl/certs/cert.pem;
 	ssl_certificate_key /etc/ssl/private/key.pem;
@@ -24,9 +27,9 @@ server {
     access_log /var/log/nginx/data-access.log combined;
 
         ## Your only path reference.
-        root /var/www/html/adminer/;
+        root /var/www/html/lld/;
         ## This should be in your http block and if it is, it's not needed here.
-        index adminer.php;
+        index index.html;
 
         ##location = /favicon.ico {
         ##        log_not_found off;
@@ -46,8 +49,8 @@ server {
         location ~ \.php$ {
                 try_files \$uri =404;
                 fastcgi_intercept_errors on;
-                fastcgi_pass adminer:9000;
-		fastcgi_index index.php;
+                fastcgi_pass lld:9000;
+		fastcgi_index index.html;
                 #The following parameter can be also included in fastcgi_params file
 		include fastcgi_params;
                 fastcgi_param  SCRIPT_FILENAME \$document_root\$fastcgi_script_name;
@@ -55,7 +58,7 @@ server {
 
 }
 EOF
-ln -s /etc/nginx/sites-available/adminer.conf /etc/nginx/sites-enabled/adminer.conf &> /dev/null
+ln -s /etc/nginx/sites-available/lld.conf /etc/nginx/sites-enabled/lld.conf &> /dev/null
 fi
 
 exit 0
