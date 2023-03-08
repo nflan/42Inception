@@ -117,6 +117,17 @@ services:
     networks:
         - myeverything
 
+  pureftpd:
+    container_name: pureftpd
+    image: pureftpd:inception
+    build: /home/nflan/inception/srcs/requirements/bonus/pureftpd
+    env_file:
+        .env
+    volumes:
+        - wordpress-data:/var/www/html
+    networks:
+        - myeverything
+
 networks:
     myeverything:
 
