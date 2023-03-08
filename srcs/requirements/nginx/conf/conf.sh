@@ -7,7 +7,7 @@ then
 	./tmp/tools/lld.sh
 else
 	rm -rf /etc/nginx/sites-enabled/adminer.conf &>/dev/null
-	rm -rf /etc/nginx/sites-enabled/lld.conf &>/dev/null
+	rm -rf /etc/nginx/sites-enabled/${FLASK_URL} &>/dev/null
 fi
 
 ./tmp/tools/nflan.sh

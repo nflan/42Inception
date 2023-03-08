@@ -44,8 +44,9 @@ services:
     build: /home/nflan/inception/srcs/requirements/nginx
     environment:
         - BONUS=1
+    env_file:
+        .env
     ports:
-        - "80:80"
         - "443:443"
     volumes:
         - wordpress-data:/var/www/html
@@ -77,6 +78,8 @@ services:
       wordpress:
         condition: service_healthy
     build: /home/nflan/inception/srcs/requirements/bonus/cadvisor
+    environment:
+        - BONUS=1
     volumes:
         - /:/rootfs:ro
         - /var/run:/var/run:rw
@@ -102,6 +105,17 @@ services:
         - myeverything
     volumes:
         - redis-vol:/var/lib/redis
+
+  flask:
+    container_name: flask
+    image: flask:inception
+    build: /home/nflan/inception/srcs/requirements/bonus/flask
+    env_file:
+        .env
+    volumes:
+        - wordpress-data:/var/www/html
+    networks:
+        - myeverything
 
 networks:
     myeverything:
