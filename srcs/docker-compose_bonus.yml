@@ -117,12 +117,15 @@ services:
     networks:
         - myeverything
 
-  pureftpd:
-    container_name: pureftpd
-    image: pureftpd:inception
-    build: /home/nflan/inception/srcs/requirements/bonus/pureftpd
+  vsftpd:
+    container_name: vsftpd
+    image: vsftpd:inception
+    build: /home/nflan/inception/srcs/requirements/bonus/vsftpd
+    privileged: true
     env_file:
         .env
+    ports:
+        - "20:21"
     volumes:
         - wordpress-data:/var/www/html
     networks:
