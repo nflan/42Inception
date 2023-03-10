@@ -121,7 +121,9 @@ services:
     container_name: vsftpd
     image: vsftpd:inception
     build: /home/nflan/inception/srcs/requirements/bonus/vsftpd
-    privileged: true
+    depends_on:
+      mariadb:
+        condition: service_healthy
     env_file:
         .env
     ports:

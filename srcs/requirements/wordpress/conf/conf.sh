@@ -1,6 +1,15 @@
 #! /bin/bash
 
-test -d '/var/www/html/nflan.42.fr' || mkdir '/var/www/html/nflan.42.fr' && chmod 0755 '/var/www/html/nflan.42.fr/'
+while ! mariadb -hmariadb -u${DATABASE_USER} -p${DATABASE_UPASS} "${DATABASE_WP}" &>/dev/null
+do
+    sleep 1
+done
+
+while ! test -d '/var/www/html/nflan.42.fr'
+do
+	sleep 1
+done
+
 pushd /var/www/html/nflan.42.fr &> /dev/null
 if [ ! -f wp-config.php ]
 then

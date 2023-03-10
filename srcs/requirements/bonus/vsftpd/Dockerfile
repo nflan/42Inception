@@ -2,9 +2,8 @@
 FROM debian:buster
 
 RUN	apt update && apt -y full-upgrade; \
-	apt install -y vsftpd ftp ufw
+	apt install -y vsftpd
 
-COPY	tools/vsftpd.conf /etc/vsftpd.conf.back
-#COPY	tools/vsftpd.conf /etc/vsftpd.conf
 COPY	conf/conf.sh /tmp/conf.sh
+
 ENTRYPOINT	["/tmp/conf.sh"]
