@@ -1,15 +1,16 @@
 #! /bin/bash
 
+#groupadd www-data -g 33
+#mkdir -p /var/ftp/wordpress
 mkdir -p ftp
 mkdir -p /var/run/vsftpd/empty
 
-adduser wp --disabled-password --gecos "" --home /var/www/html --shell /bin/bash
-echo "wp:nflan42" | chpasswd
-usermod -aG www-data wp
-chgrp -R wp /var/www/html
-chmod -R g+w /var/www/html
-
-echo "
+adduser wordpress --disabled-password --gecos "" --home /var/www/html/nflan.42.fr --shell /bin/bash
+echo wordpress:nflan42 | chpasswd
+usermod -aG www-data wordpress
+chgrp -R wordpress /var/www/html/nflan.42.fr
+chmod -R g+w /var/www/html/nflan.42.fr
+cat << EOF > "/etc/vsftpd.conf"
 seccomp_sandbox=NO
 # Example config file /etc/vsftpd.conf
 #
@@ -17,7 +18,7 @@ seccomp_sandbox=NO
 # loosens things up a bit, to make the ftp daemon more usable.
 # Please see vsftpd.conf.5 for all compiled in defaults.
 #
-# READ THIS: This example file is NOT an exhaustive list of vsftpd options
+# READ THIS: This example file is NOT an exhaustive list of vsftpd options.
 # Please read the vsftpd.conf.5 manual page to get a full idea of vsftpd's
 # capabilities.
 #
@@ -30,11 +31,11 @@ local_enable=YES
 # Uncomment this to enable any form of FTP write command.
 write_enable=YES
 #
-# Default umask for local users is 077. You may wish to change this to 022
+# Default umask for local users is 077. You may wish to change this to 022,
 # if your users expect that (022 is used by most other ftpd's)
 #local_umask=022
 #
-# Uncomment this to allow the anonymous FTP user to upload files. This onl
+# Uncomment this to allow the anonymous FTP user to upload files. This only
 # has an effect if the above global write enable is activated. Also, you will
 # obviously need to create a directory writable by the FTP user.
 #anon_upload_enable=YES
@@ -45,13 +46,13 @@ write_enable=YES
 #
 # Activate directory messages - messages given to remote users when they
 # go into a certain directory.
-dirmessage_enable=YES
+#dirmessage_enable=YES
 #
 # Activate logging of uploads/downloads.
 xferlog_enable=YES
 #
 # Make sure PORT transfer connections originate from port 20 (ftp-data).
-connect_from_port_20=NO
+connect_from_port_20=YES
 #
 # If you want, you can arrange for uploaded anonymous files to be owned by
 # a different user. Note! Using root for uploaded files is not
@@ -64,14 +65,14 @@ connect_from_port_20=NO
 xferlog_file=/dev/stdout
 #
 # If you want, you can have your log file in standard ftpd xferlog format.
-# Note that the default log file location is /var/log/xferlog in this case
+# Note that the default log file location is /var/log/xferlog in this case.
 #xferlog_std_format=YES
 #
 # You may change the default value for timing out an idle session.
-#idle_session_timeout=600
+idle_session_timeout=600
 #
 # You may change the default value for timing out a data connection.
-#data_connection_timeout=120
+data_connection_timeout=120
 #
 # It is recommended that you define on your system a unique user which the
 # ftp server can use as a totally isolated and unprivileged user.
@@ -82,12 +83,12 @@ xferlog_file=/dev/stdout
 # however, may confuse older FTP clients.
 #async_abor_enable=YES
 #
-# By default the server will pretend to allow ASCII mode but in fact ignor
-# the request. Turn on the below options to have the server actually do ASCI
+# By default the server will pretend to allow ASCII mode but in fact ignore
+# the request. Turn on the below options to have the server actually do ASCII
 # mangling on files when in ASCII mode.
-# Beware that on some FTP servers, ASCII support allows a denial of servic
+# Beware that on some FTP servers, ASCII support allows a denial of service
 # attack (DoS) via the command SIZE /big/file in ASCII mode. vsftpd
-# predicted this attack and has always been safe, reporting the size of th
+# predicted this attack and has always been safe, reporting the size of the
 # raw file.
 # ASCII mangling is a horrible feature of the protocol.
 #ascii_upload_enable=YES
@@ -102,14 +103,14 @@ xferlog_file=/dev/stdout
 # (default follows)
 #banned_email_file=/etc/vsftpd.banned_emails
 #
-# You may specify an explicit list of local users to chroot() to their hom
+# You may specify an explicit list of local users to chroot() to their home
 # directory. If chroot_local_user is YES, then this list becomes a list of
 # users to NOT chroot().
 # (Warning! chroot'ing can be very dangerous. If using chroot, make sure that
-# the user does not have write access to the top level directory within th
+# the user does not have write access to the top level directory within the
 # chroot)
-chroot_local_user=YES
-allow_writeable_chroot=YES
+#chroot_local_user=YES
+#allow_writeable_chroot=YES
 #chroot_list_enable=YES
 # (default follows)
 #chroot_list_file=/etc/vsftpd.chroot_list
@@ -126,14 +127,16 @@ allow_writeable_chroot=YES
 listen=YES
 #
 # This directive enables listening on IPv6 sockets. To listen on IPv4 and IPv6
-# sockets, you must run two copies of vsftpd with two configuration files
+# sockets, you must run two copies of vsftpd with two configuration files.
 # Make sure, that one of the listen options is commented !!
 #listen_ipv6=YES
+#local_root=/var/www/html/nflan.42.fr
+#log_ftp_protocol=YES
+#vsftpd_log_file=/var/log/vsftpd.log
+#secure_chroot_dir=/var/run/vsftpd/empty
+#pasv_enable=YES
 
-local_root=/var/www/html
-log_ftp_protocol=YES
-vsftpd_log_file=/var/log/vsftpd.log
-" > /etc/vsftpd.conf
+EOF
 
 echo "Starting vsftpd"
 exec vsftpd /etc/vsftpd.conf
