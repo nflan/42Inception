@@ -1,12 +1,13 @@
 #! bin/bash
 
-openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/key.pem -out /etc/ssl/certs/cert.pem -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=nflan/CN=nflan.42.fr"
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/wpkey.pem -out /etc/ssl/certs/wpcert.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=${WORDPRESS_URL}"
 
 if [ ! -f /etc/nginx/sites-available/nflan.conf ]
 then
 cat << EOF > /etc/nginx/sites-available/nflan.conf
 server {
   listen 80;
+  listen [::]:80;
   server_name nflan.42.fr;
 
   return 301 https://\$host\$request_uri;
@@ -14,10 +15,11 @@ server {
 
 server {
   listen 443 ssl;
+  listen [::]:443 ssl;
   server_name nflan.42.fr;
     
-	ssl_certificate /etc/ssl/certs/cert.pem;
-	ssl_certificate_key /etc/ssl/private/key.pem;
+	ssl_certificate /etc/ssl/certs/wpcert.crt;
+	ssl_certificate_key /etc/ssl/private/wpkey.pem;
 
 	ssl_protocols TLSv1.2 TLSv1.3;
 

@@ -6,7 +6,8 @@ done
 echo "end of sleep"
 if [ ! -f /etc/ssl/private/proftpd.key ]
 then
-openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=nflan/CN=ftp.nflan.42.fr"
+openssl genrsa -out /etc/ssl/private/proftpd.key 1024
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/proftpd.key -out /etc/ssl/certs/proftpd.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=ftp.${WORDPRESS_URL}"
 useradd ${FTP_USER}
 echo "${FTP_PASS}" | ftpasswd --stdin --passwd --file /etc/proftpd/ftpd.passwd --gid 33 --uid 33 --shell /bin/false --name "${FTP_USER}" --home /wordpress/nflan.42.fr
 ftpasswd --group --name="${FTP_USER}" --file=/etc/proftpd/ftpd.group --gid=33 --member "${FTP_USER}"

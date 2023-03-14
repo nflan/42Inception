@@ -70,25 +70,23 @@ services:
     networks:
         - myeverything
   
-          #  cadvisor:
-          # container_name: cadvisor
-          # image: cadvisor:inception
-          # privileged: true
-          #  depends_on:
-          #    wordpress:
-          #   condition: service_healthy
-          #   build: requirements/bonus/cadvisor
-          #   environment:
-          #   - BONUS=1
-          # volumes:
-          #  - /:/rootfs:ro
-          # - /var/run:/var/run:rw
-          # - /sys:/sys:ro
-          # - /var/lib/docker/:/var/lib/docker:ro
-          #    ports:
-          # - 9092:8080
-          #    networks:
-          # - myeverything
+  cadvisor:
+    container_name: cadvisor
+    image: cadvisor:inception
+    privileged: true
+    depends_on:
+      wordpress:
+        condition: service_healthy
+    build: requirements/bonus/cadvisor
+    volumes:
+        - /:/rootfs:ro
+        - /var/run:/var/run:rw
+        - /sys:/sys:ro
+        - /var/lib/docker/:/var/lib/docker:ro
+    ports:
+        - "8080:8080"
+    networks:
+        - myeverything
 
   redis:
     container_name: redis
@@ -120,7 +118,7 @@ services:
   proftpd:
     container_name: proftpd
     image: proftpd:inception
-    build: requirements/bonus/vsftpd
+    build: requirements/bonus/proftpd
     depends_on:
       wordpress:
         condition: service_healthy
@@ -128,6 +126,9 @@ services:
         .env
     ports:
         - "20:21"
+    expose:
+        - "20"
+        - "21"
     volumes:
         - wordpress-data:/wordpress
     networks:

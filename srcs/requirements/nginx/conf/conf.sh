@@ -10,7 +10,9 @@ else
 	rm -rf /etc/nginx/sites-enabled/${FLASK_URL} &>/dev/null
 fi
 
+echo "daemon off;" >> /etc/nginx/nginx.conf
+
 ./tmp/tools/nflan.sh
-rm -rf /etc/nginx/sites-enabled/default
 echo "Starting nginx"
-exec nginx -g 'daemon off;'
+exec nginx
+#-g 'daemon off;'
