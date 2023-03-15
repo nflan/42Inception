@@ -125,10 +125,9 @@ services:
     env_file:
         .env
     ports:
-        - "20:21"
-    expose:
-        - "20"
-        - "21"
+      #   - "20:21"
+        - 127.0.0.1:21:21
+          #  - 0.0.0.0:20:20
     volumes:
         - wordpress-data:/wordpress
     networks:
