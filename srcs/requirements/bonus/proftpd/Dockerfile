@@ -1,11 +1,7 @@
 # syntax=docker/dockerfile:1
 FROM debian:buster
 
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN printf '#! /bin/sh\nexit 0' > /usr/sbin/policy-rc.d; \
-	echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections; \
-	apt-get update && \
+RUN apt update && apt -y full-upgrade; \
 	apt-get install --no-install-recommends --no-install-suggests -y proftpd \
 	openssl && \
 	test /wordpress || mkdir /wordpress &&\

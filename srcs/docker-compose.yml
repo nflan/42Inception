@@ -4,7 +4,7 @@ services:
   mariadb:
     container_name: mariadb
     image: mariadb:inception
-    build: /home/nflan/inception/srcs/requirements/mariadb
+    build: requirements/mariadb
     healthcheck:
       test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
       interval: 2s
@@ -22,7 +22,7 @@ services:
     depends_on:
       mariadb:
         condition: service_healthy
-    build: /home/nflan/inception/srcs/requirements/wordpress
+    build: requirements/wordpress
     env_file:
       .env
     volumes:
@@ -37,7 +37,9 @@ services:
   nginx:
     container_name: nginx
     image: nginx:inception
-    build: /home/nflan/inception/srcs/requirements/nginx
+    build: requirements/nginx
+    env_file:
+      .env
     ports:
       - "80:80"
       - "443:443"

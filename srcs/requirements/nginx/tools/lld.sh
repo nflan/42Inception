@@ -1,6 +1,6 @@
 #! bin/bash
 
-openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/lldkey.pem -out /etc/ssl/certs/lldcert.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=${FLASK_URL}"
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/lldkey.pem -out /etc/ssl/certs/lldcert.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=${FLASK_URL}" &> /dev/null
 
 if [ ! -f /etc/nginx/sites-available/${FLASK_URL} ]
 then

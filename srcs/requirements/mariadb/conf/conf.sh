@@ -9,15 +9,19 @@ FLUSH PRIVILEGES;
 BLOCK
 
 service mysql start &> /dev/null
+
 sleep 1
+
 while [ [ ! mysqladmin -uroot --password="" status &> /dev/null ] && [ ! mysqladmin -uroot --password="${DATABASE_PASSWORD}" status &> /dev/null ] ] 
 do
 	echo "Waiting for service"
 	sleep 1
 done
-sleep 1
-test -d /var/lib/mysql/wordpress || (echo "Database is configurating" && mysql -uroot --password="" < /tmp/config.sql)
+
+test -d /var/lib/mysql/wordpress || (echo "Configuring Database" && mysql -uroot --password="" < /tmp/config.sql)
 mysqladmin --user=${DATABASE_ADM} --password=${DATABASE_PASSWORD} shutdown
+
 sleep 1
+
 echo "Starting Mysql"
 exec mysqld --bind-address=0.0.0.0

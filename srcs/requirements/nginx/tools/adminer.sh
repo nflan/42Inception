@@ -1,6 +1,6 @@
 #! bin/bash
 
-openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/adkey.pem -out /etc/ssl/certs/adcert.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=adminer.fr"
+openssl req -x509 -newkey rsa:4096 -keyout /etc/ssl/private/adkey.pem -out /etc/ssl/certs/adcert.crt -sha256 -days 365 -nodes -subj "/C=FR/ST=France/L=Paris/O=42/OU=${COMPOSE_PROJECT_NAME}/CN=adminer.fr" &>/dev/null
 
 if [ ! -f /etc/nginx/sites-available/adminer.conf ]
 then
