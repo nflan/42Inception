@@ -1,4 +1,3 @@
-SRC= /home/nflan/inception/srcs/docker-compose.yml
 NAME= inception
 
 all:
