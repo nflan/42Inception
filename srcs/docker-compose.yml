@@ -5,6 +5,7 @@ services:
     container_name: mariadb
     image: mariadb:inception
     build: requirements/mariadb
+    restart: on-failure
     healthcheck:
       test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
       interval: 2s
@@ -19,10 +20,11 @@ services:
   wordpress:
     container_name: wordpress
     image: wordpress:inception
+    build: requirements/wordpress
+    restart: on-failure
     depends_on:
       mariadb:
         condition: service_healthy
-    build: requirements/wordpress
     env_file:
       .env
     volumes:
@@ -38,10 +40,10 @@ services:
     container_name: nginx
     image: nginx:inception
     build: requirements/nginx
+    restart: on-failure
     env_file:
       .env
     ports:
-      - "80:80"
       - "443:443"
     volumes:
       - wordpress-data:/var/www/html

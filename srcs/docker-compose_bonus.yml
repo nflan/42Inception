@@ -5,6 +5,7 @@ services:
     container_name: mariadb
     image: mariadb:inception
     build: requirements/mariadb
+    restart: on-failure
     healthcheck:
         test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
         interval: 2s
@@ -20,10 +21,11 @@ services:
   wordpress:
     container_name: wordpress
     image: wordpress:inception
+    build: requirements/wordpress
+    restart: on-failure
     depends_on:
       mariadb:
         condition: service_healthy
-    build: requirements/wordpress
     environment:
         - BONUS=1
     env_file:
@@ -42,6 +44,7 @@ services:
     container_name: nginx
     image: nginx:inception
     build: requirements/nginx
+    restart: on-failure
     environment:
         - BONUS=1
     env_file:
@@ -59,10 +62,11 @@ services:
   adminer:
     container_name: adminer
     image: adminer:inception
+    build: requirements/bonus/adminer
+    restart: on-failure
     depends_on:
       wordpress:
         condition: service_healthy
-    build: requirements/bonus/adminer
     env_file:
         .env
     volumes:
@@ -73,11 +77,12 @@ services:
   cadvisor:
     container_name: cadvisor
     image: cadvisor:inception
+    build: requirements/bonus/cadvisor
+    restart: on-failure
     privileged: true
     depends_on:
       wordpress:
         condition: service_healthy
-    build: requirements/bonus/cadvisor
     volumes:
         - /:/rootfs:ro
         - /var/run:/var/run:rw
@@ -91,10 +96,11 @@ services:
   redis:
     container_name: redis
     image: redis:inception
+    build: requirements/bonus/redis
+    restart: on-failure
     depends_on:
       wordpress:
         condition: service_healthy
-    build: requirements/bonus/redis
     sysctls:
         - net.core.somaxconn=512
     env_file:
@@ -108,6 +114,7 @@ services:
     container_name: flask
     image: flask:inception
     build: requirements/bonus/flask
+    restart: on-failure
     env_file:
         .env
     volumes:
@@ -119,15 +126,14 @@ services:
     container_name: proftpd
     image: proftpd:inception
     build: requirements/bonus/proftpd
+    restart: on-failure
     depends_on:
       wordpress:
         condition: service_healthy
     env_file:
         .env
     ports:
-      #   - "20:21"
         - 127.0.0.1:21:21
-          #  - 0.0.0.0:20:20
     volumes:
         - wordpress-data:/wordpress
     networks:

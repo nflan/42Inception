@@ -10,7 +10,7 @@ server {
   listen [::]:80;
   server_name nflan.42.fr;
 
-  return 301 https://\$host\$request_uri;
+  return 404;
 }
 
 server {

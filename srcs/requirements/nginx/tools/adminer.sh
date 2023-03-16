@@ -10,7 +10,7 @@ server {
   listen [::]:80 ssl;
   server_name adminer.fr;
 
-  return 301 https://\$host\$request_uri;
+  return 404;
 }
 
 server {
