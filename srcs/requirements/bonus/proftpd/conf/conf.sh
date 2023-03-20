@@ -10,6 +10,11 @@ then
 	useradd ${FTP_USER}
 	echo "${FTP_PASS}" | ftpasswd --stdin --passwd --file /etc/proftpd/ftpd.passwd --gid 33 --uid 33 --shell /bin/false --name "${FTP_USER}" --home /wordpress/nflan.42.fr &> /dev/null
 	ftpasswd --group --name="${FTP_USER}" --file=/etc/proftpd/ftpd.group --gid=33 --member "${FTP_USER}" &> /dev/null
+	sed -i "s/proftpduser/${FTP_USER}/g" "/etc/proftpd/proftpd.conf" &> /dev/null
+	sed -i "s/proftpduser/${FTP_USER}/g" "/etc/proftpd/conf.d/Inception.conf" &> /dev/null
+
+	sed -i "s/proftpdgroup/www-data/g" "/etc/proftpd/proftpd.conf" &> /dev/null
+	sed -i "s/proftpdgroup/www-data/g" "/etc/proftpd/conf.d/Inception.conf" &> /dev/null
 fi
 
 echo "starting proftpd"
