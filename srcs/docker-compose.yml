@@ -1,15 +1,10 @@
-<<<<<<< HEAD
 version: '3.8'
 
-=======
-version: '3.1'
->>>>>>> a681295 (Starting wordpress and get dependances)
 services:
   mariadb:
     container_name: mariadb
     image: mariadb:inception
     build: requirements/mariadb
-    restart: on-failure
     healthcheck:
       test: ["CMD", "mysql", "--user=${DATABASE_USER}", "--password=${DATABASE_UPASS}", "wordpress" ]
       interval: 2s
@@ -24,11 +19,10 @@ services:
   wordpress:
     container_name: wordpress
     image: wordpress:inception
-    build: requirements/wordpress
-    restart: on-failure
     depends_on:
       mariadb:
         condition: service_healthy
+    build: requirements/wordpress
     env_file:
       .env
     volumes:
@@ -44,13 +38,12 @@ services:
     container_name: nginx
     image: nginx:inception
     build: requirements/nginx
-    restart: on-failure
     env_file:
       .env
     ports:
+      - "80:80"
       - "443:443"
     volumes:
-<<<<<<< HEAD
       - wordpress-data:/var/www/html
     networks:
       - myeverything
@@ -58,42 +51,6 @@ services:
       wordpress:
         condition: service_healthy
   
-=======
-      - wordpress-data:/var/www/html/nflan.42.fr
-    networks:
-      - myeverything
-    depends_on:
-      wordpress:
-        condition: service_healthy
-  wordpress:
-    depends_on:
-      mariadb:
-        condition: service_healthy
-    build: /home/nflan/inception/srcs/requirements/wordpress
-    environment:
-      - nflan.42.fr
-    volumes:
-      - wordpress-data:/var/www/html/nflan.42.fr
-    networks:
-      - myeverything
-    healthcheck:
-      test: ["CMD", "wp", "find"]
-      interval: 4s
-      timeout: 4s
-      retries: 40
-  mariadb:
-    build: /home/nflan/inception/srcs/requirements/mariadb
-    healthcheck:
-      test: ["CMD", "mysql", "--user=nflan42", "--password=nflan42", "wordpress"]
-      interval: 2s
-      timeout: 2s
-      retries: 20
-    volumes:
-      - database:/var/lib/mysql
-    networks:
-      - myeverything
-
->>>>>>> a681295 (Starting wordpress and get dependances)
 networks:
   myeverything:
 
